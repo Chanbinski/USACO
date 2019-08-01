@@ -1,0 +1,89 @@
+#include <cstdio>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 1005;
+int m = 0;
+int ans = 1000;
+int a[N], b[N];
+int a2[N], b2[N];
+int s[N][N], s1[N][N],s2[N][N],s3[N][N],s4[N][N];
+
+int main() {
+    
+    scanf("%d", &m);
+    for(int i=0;i<m;i++){
+        int x,y;
+        scanf("%d%d", &x, &y);
+        a[i] = x;
+        a2[i] = x;
+        b[i] = y;
+        b2[i] = y;
+    }
+    sort(a, a+m);
+    sort(b, b+m);
+    
+    for(int i=0;i<m;i++) {
+        for(int j=0;j<m;j++) {
+            if(a[i] == a2[j]) {
+            	a2[j] = i;
+            }
+            if(b[i] == b2[j]) {
+                b2[j] = i;
+            }
+        }
+    }
+      
+    for(int i=0;i<m;i++) {
+        s[a2[i]+1][b2[i]+1] = 1;
+        s1[a2[i]+1][b2[i]+1] = 1;
+        s2[a2[i]+1][b2[i]+1] = 1;
+        s3[a2[i]+1][b2[i]+1] = 1;
+        s4[a2[i]+1][b2[i]+1] = 1;
+    }
+    
+    for(int i=1;i<=m;i++) {
+        for(int j=1;j<=m;j++) {
+            if(j>0){ s1[i][j]+=s1[i][j-1]; }
+            if(i>0){ s1[i][j]+=s1[i-1][j]; }
+            if(i>0 && j>0) { s1[i][j] -= s1[i-1][j-1]; }
+        }
+    }
+    
+    for(int i=1;i<=m;i++) {
+        for(int j=m;j>=1;j--) {
+            if(j<m){ s2[i][j]+=s2[i][j+1]; }
+            if(i>0){ s2[i][j]+=s2[i-1][j]; }
+            if(i>0 && j<m) { s2[i][j] -= s2[i-1][j+1]; }
+        }
+    }
+
+    
+    for(int i=m;i>=1;i--) {
+        for(int j=m;j>=1;j--) {
+            if(j<m){ s3[i][j]+=s3[i][j+1]; }
+            if(i<m){ s3[i][j]+=s3[i+1][j]; }
+            if(i<m && j<m) { s3[i][j] -= s3[i+1][j+1]; }
+        }
+    }
+    
+    for(int i=m;i>=1;i--) {
+        for(int j=1;j<=m;j++) {
+            if(j>0){ s4[i][j]+=s4[i][j-1]; }
+            if(i<m){ s4[i][j]+=s4[i+1][j]; }
+            if(i<m && j>0) { s4[i][j] -= s4[i+1][j-1]; }
+        }
+    }
+    
+    
+    int temp;
+    for(int i=1;i<m;i++){
+        for(int j=1;j<m;j++){
+            temp = max(s1[i][j], max(s2[i][j+1], max(s3[i+1][j+1], s4[i+1][j])));
+            ans = min(temp, ans);
+    	}
+    }
+    printf("%d", ans);
+    return 0;
+}
