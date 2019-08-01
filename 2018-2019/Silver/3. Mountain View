@@ -1,0 +1,33 @@
+#include <stdio.h>
+#include <algorithm>
+using namespace std;
+
+int n = 0;
+pair<int, int> a[100005];
+pair<int, int> b[100005];
+
+bool compare(pair<int, int> l, pair<int, int> r) {
+    if(l.first == r.first) return (l.second - l.first) > (r.second - r.first);
+    return l.first < r.first;
+}
+
+int main() {
+    scanf("%d", &n);
+    for(int i=0;i<n;i++) {
+        int x, y;
+        scanf("%d %d", &x, &y);
+        a[i] = make_pair(x-y, x+y);
+    }
+    sort(a, a+n, compare);
+    
+    int top = 0;
+    int ans = n;
+    b[0] = a[0];
+    for(int i=1;i<n;i++) {
+        if(a[i].second <= b[top].second) ans--;
+        else b[++top] = a[i];
+    }
+    
+    printf("%d", ans);
+    return 0;
+}
