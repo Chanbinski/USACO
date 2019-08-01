@@ -1,0 +1,25 @@
+#include <stdio.h>
+#include <algorithm>
+
+
+int main() {
+    
+    int a[3];
+    int max_cnt = 0;
+    int min_cnt = 0;
+    scanf("%d %d %d", &a[0], &a[1], &a[2]);
+    std::sort(a, a+3);
+    if(a[0] + 1 == a[1] && a[1] + 1 == a[2]) {
+        printf("%d\n%d", 0, 0);
+        return 0;
+    }
+    
+    if(a[0] + 2 == a[1] || a[1] + 2 == a[2]) min_cnt = 1;
+    else min_cnt = 2;
+    
+    max_cnt = std::max(a[1] - a[0], a[2] - a[1]) - 1;
+    //printf("%d %d %d\n", a[0], a[1], a[2]);
+    printf("%d\n", min_cnt);
+    printf("%d", max_cnt);
+    return 0;
+}
