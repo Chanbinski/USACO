@@ -1,0 +1,46 @@
+#include <cstdio>
+#include <vector>
+#include <algorithm>
+using namespace std;
+int n = 0;
+int ans = 0;
+int ret = 1000;
+pair < int, int > cow[1005];
+
+int main() {
+	scanf("%d", &n);
+    for(int i=0;i<n;i++){
+        int x, y;
+        scanf("%d %d", &x, &y);
+        cow[i] = make_pair(x, y);
+    }
+    sort(cow, cow+n);
+    cow[n].first = 987654321, cow[n].second = 987654321;
+    for(int y=0;y<n;y++){
+        int bigY = cow[y].second - 1;
+        int low = 0;
+        int high = 0;
+        for(int i=0;i<n;i++){
+            if(cow[i].second > bigY) high++;
+            else low++;
+        }
+    	int r1 = 0, r2 = 0;
+        int r3 = high;
+        int r4 = low;
+        for(int x=0;x<n;x++){
+            if(cow[x].second > bigY) {
+                r1++;
+                r3--;
+            }
+            else {
+                r2++;
+                r4--;
+            }
+            if(cow[x].first != cow[x+1].first) {
+                ans = max(r1, max(r2, max(r3, r4)));
+                ret = min(ret, ans);
+            }
+        }
+    }
+    printf("%d", ret);
+}
