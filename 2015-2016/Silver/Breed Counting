@@ -1,0 +1,26 @@
+#include <cstdio>
+
+const int N = 1e5 + 5;
+int n, m = 0;
+int a[3][N];
+
+int main() {
+    scanf("%d%d", &n, &m);
+    int breed = 0;
+    for(int i=1;i<=n;i++) {
+        scanf("%d", &breed);
+        for(int j=0;j<3;j++) {
+            a[j][i] = a[j][i-1];
+        }
+        a[breed-1][i]++;
+    }
+    for(int i=0;i<m;i++){
+        int x,y,z;
+        scanf("%d%d", &x, &y);
+        for(int j=0;j<3;j++) {
+            z = a[j][y] - a[j][x-1];
+            printf("%d ", z);
+        }
+        printf("\n");
+    }
+}
