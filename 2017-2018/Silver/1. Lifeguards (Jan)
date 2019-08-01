@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <algorithm>
+using namespace std;
+
+int n = 0;
+pair<int, int> a[100005];
+pair<int, int> all[200005];
+int arr[200005] = {0,};
+pair<int, int> stk[200005];
+bool check = true;
+
+int main() {
+    //freopen("lifeguards.in", "r", stdin);
+    //freopen("lifeguards.out", "w", stdout);
+    
+    scanf("%d", &n);
+    for(int i=0;i<n;i++){
+        int x, y;
+        scanf("%d %d", &x, &y);
+        a[i] = make_pair(x, y);
+        all[2*i] = make_pair(x, 0);
+        all[2*i+1] = make_pair(y, 1);
+    }
+    //Sweeping
+    sort(a, a+n);
+    int top = 0;
+    stk[top] = make_pair(a[0].first, a[0].second);
+    for(int i=1;i<n;i++){
+        if(stk[top].second >= a[i].first && a[i].second >= stk[top].second) stk[top].second = a[i].second;
+        else if(stk[top].second < a[i].first) stk[++top] = a[i];
+        else check = false;
+    }
+    
+    int total = 0;
+    for(int i=0;i<=top;i++){
+        total += stk[i].second - stk[i].first;
+    }
+    
+    sort(all, all+2*n);
+    int start, end;
+    int gaesu = 0;
+    int size = 1987654321;
+    for( int i = 0 ; i < 2 * n ; i ++){
+        if( all[i].second == 0 ){
+            gaesu++;
+        }else{
+            gaesu--;
+        }
+        start = all[i].first; end = all[i+1].first;
+        if( gaesu == 1 ){
+            if( size > end - start ){
+                size = end - start;
+            }
+        }
+    }
+    if(check) printf("%d", total - size);
+    else printf("%d", total);
+    return 0;
+}
