@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+
+const int N = 1005;
+int n = 0;
+vector< bool > visited;
+vector< int > adj;
+vector< int > temp;
+int ans[N];
+
+void go(int x) {
+    temp.push_back(x);
+    int y = adj[x];
+    if(y != 0) visited[x] = true;
+    
+    if(y == 0) {
+        for(int i = 0; i < temp.size(); i ++) {
+            visited[temp[i]] = false;
+        }
+        temp.clear();
+    }
+    else {
+        if(!visited[y]) {
+            go(y);
+        }
+    }
+}
+
+int main() {
+    scanf("%d", &n);
+    adj.resize(n + 1);
+    visited.resize(n + 1, false);
+    for(int i = 1; i <= n; i ++) {
+        int x;
+        scanf("%d", &x);
+        adj[i] = x;
+    }
+    for(int i = 1; i <= n; i ++) {
+        if(!visited[i]) {
+            go(i);
+            for(int i = 0; i < temp.size(); i ++) {
+                ans[temp[i]] = 1;
+            }
+            temp.clear();
+        }
+    }
+    int cnt = 0;
+    for(int i = 1; i <= n; i++) {
+        if(ans[i] == 0) cnt++;
+    }
+    printf("%d", cnt);
+}
