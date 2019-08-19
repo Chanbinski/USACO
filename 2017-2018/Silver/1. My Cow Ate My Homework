@@ -1,0 +1,39 @@
+#include <stdio.h>
+#include <algorithm>
+
+const int N = 100005;
+int n;
+long long a[N];
+long long sum[N];
+long long min[N];
+
+int main() {
+	scanf("%d", &n);
+	for(int i = 0; i < n; i ++) {
+		scanf("%lld", a + i);
+		min[i] = 0;
+	}
+	for(int i = n - 1; i >= 1; i --) {
+		sum[i] = sum[i + 1] + a[i];
+	}
+	min[n] = 10005;
+	for(int i = n - 1; i >= 1; i --) {
+		min[i] = std::min(min[i + 1], a[i]); 
+	}
+	
+	long long max_den = 1;
+	long long max_num = 0;
+	for(int i = 1; i <= n - 2; i ++) {
+		if(max_den * (sum[i] - min[i]) > max_num * (n - i - 1)) {
+			max_den = n - i - 1;
+			max_num = sum[i] - min[i];
+		}
+	}
+	
+	for(int i = 1; i <= n - 2; i ++) {
+		if(max_den * (sum[i] - min[i]) == max_num * (n - i - 1)) {
+			printf("%d\n", i);
+		}
+	}
+}
+	
