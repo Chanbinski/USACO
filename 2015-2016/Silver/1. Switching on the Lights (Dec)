@@ -1,3 +1,12 @@
+//Chanbin Park
+//09/08/19
+/*
+I used DFS to solve this problem. The problem at first looks very simple, but there is one big thing we have to consider.
+We need to check on rooms that are already visited. This happens when Bessie lights a room after she visits that room. 
+The function, did_visit, is solving this problem in the code.
+*/
+
+
 #include <stdio.h>
 #include <algorithm>
 #include <vector>
