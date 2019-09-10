@@ -1,0 +1,95 @@
+//Chanbin Park
+//09/10/19
+/* 
+This was labor-intensive! Just kidding, I just used DFS to search for any sets of numbers that exceeds k. 
+Then, I erased all those sets.
+*/
+
+#include <stdio.h>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+
+int n, k;
+typedef pair < int, int > ii;
+int map[105][105];
+bool visited[105][105];
+int dx[] = {1, -1, 0, 0};
+int dy[] = {0, 0, 1, -1};
+vector < pair < int, int > > temp;
+vector < int > temp_col;
+int ret = 0;
+
+void clean() {
+	for(int j = 0; j < 10; j ++) {
+		for(int i = n - 1; i  >= 0; i --) {
+			if(map[i][j] != 0) {
+				temp_col.push_back(map[i][j]);
+			}
+		}
+		int idx = 0;
+		for(int i = n - 1; i > n - 1 - temp_col.size(); i --) {
+			map[i][j] = temp_col[idx++];
+		}
+		for(int i = n - 1 - temp_col.size(); i >= 0; i --) {
+			map[i][j] = 0;
+		}
+		temp_col.clear();
+	}
+}
+
+void reset_visit() {
+	for(int i = 0; i < n; i ++) {
+		for(int j = 0; j < 10; j ++) {
+			visited[i][j] = false;
+		}
+	}
+}
+
+void dfs(int x, int y) {
+	if(map[x][y] == 0) return;
+	visited[x][y] = true;
+	temp.push_back(ii(x, y));
+	for(int i = 0; i < 4; i ++) {
+		int nx = x + dx[i];
+		int ny = y + dy[i];
+		if(0<=nx && nx<n && 0<=ny && ny<10 && !visited[nx][ny] && map[nx][ny] == map[nx - dx[i]][ny - dy[i]]) {
+			dfs(nx, ny);
+		}
+	}
+}
+
+int main() {
+	scanf("%d %d", &n, &k);
+	for(int i = 0; i < n; i ++) {
+		for(int j = 0; j < 10; j ++) {
+			scanf("%1d", &map[i][j]);
+		}
+	}
+	while(true) {
+		ret = 0;
+		for(int i = 0; i < n; i ++) {
+			for(int j = 0; j < 10; j ++) {
+				dfs(i, j);
+				if(temp.size() >= k) {
+					ret++;
+					for(int a = 0; a < temp.size(); a ++) {
+						map[temp[a].first][temp[a].second] = 0;
+					}
+				}
+				reset_visit();
+				temp.clear();
+			}
+		}
+		clean();
+		if(ret == 0) break;
+	}
+	
+	for(int i = 0; i < n; i ++) {
+		for(int j = 0; j < 10; j ++) {
+			printf("%d", map[i][j]);
+		}
+		printf("\n");
+	}
+}
