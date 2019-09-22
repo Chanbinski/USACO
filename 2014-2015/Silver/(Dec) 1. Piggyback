@@ -1,0 +1,55 @@
+/*
+NAME: Chanbin Park
+PROG: piggyback
+LANG: C++
+*/
+/* LANG can be C++11 or C++14 for those more recent releases */
+#include <stdio.h>
+#include <algorithm>
+#include <vector>
+#include <queue>
+
+using namespace std;
+typedef long long ll;
+ll b, e, p, n, m;
+vector < vector < ll > > field;
+
+vector < ll > bfs(int start) {
+	vector < ll > distance(field.size(), -1);
+	queue < ll > q;
+	distance[start] = 0;
+	q.push(start);
+	while(!q.empty()) {
+		ll curr = q.front();
+		q.pop();
+		for(ll next : field[curr]) {
+			if(distance[next] == -1) {
+				distance[next] = distance[curr] + 1;
+				q.push(next);
+			}
+		}
+	}
+	return distance;
+}
+
+int main() {
+	freopen("piggyback.in", "r", stdin);
+	freopen("piggyback.out", "w", stdout);
+	scanf("%lld %lld %lld %lld %lld", &b, &e, &p, &n, &m);
+	field.resize(n + 1);
+	for(int i = 0; i < m; i ++) {
+		int x, y;
+		scanf("%d %d", &x, &y); x--; y--;
+		field[x].push_back(y);
+		field[y].push_back(x);
+	}
+	vector < ll > D0 = bfs(0);
+	vector < ll > D1 = bfs(1);
+	vector < ll > Dn = bfs(n - 1);
+
+	ll ans = 40000*40000;
+	for(int i = 0; i < n; i ++) {
+		ans = min(ans, D0[i] * b + D1[i] * e + Dn[i] * p);
+	}
+	printf("%lld", ans);
+}
