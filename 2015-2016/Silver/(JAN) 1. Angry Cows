@@ -1,0 +1,60 @@
+/*
+NAME: Chanbin Park
+PROG: angry
+LANG: C++
+DESC: This was easy. I just did binary search to find the best solution. One thing I did to reduce the time is to make a 
+index('thr' in the code) to keep track of the hay bales that were destroyed.
+*/
+
+#include <stdio.h>
+#include <algorithm>
+using namespace std;
+
+const int N = 50005;
+int n, k;
+int max_hay;
+int hay[N];
+int thr = 0;
+
+int find_idx(int x) {
+    for(int i = thr; i < n; i ++) {
+        if(hay[i] > x) return i;
+    }
+    return 0;
+}
+
+bool check(int m) {
+    int curr = 0;
+    int curr_idx = 0;
+    thr = 0;
+    for(int i = 0; i < k; i ++) {
+        curr = hay[curr_idx] + 2 * m;
+        if(curr >= max_hay) return true;
+        else {
+            curr_idx = find_idx(curr);
+            thr = curr_idx;
+        }
+    }
+    return false;
+}
+
+int main() {
+    
+    freopen("angry.in", "r", stdin);
+    freopen("angry.out", "w", stdout);
+    
+    scanf("%d %d", &n, &k);
+    for(int i = 0; i < n; i ++) {
+        scanf("%d", &hay[i]);
+    }
+    sort(hay, hay + n);
+    max_hay = hay[n - 1];
+    
+    int l = 0, r = 1e9 / 2;
+    while(l <= r) {
+        int m = (l + r) / 2;
+        if(check(m)) r = m - 1;
+        else l = m + 1;
+    }
+    printf("%d", l);
+}
