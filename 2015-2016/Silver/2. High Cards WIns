@@ -1,0 +1,51 @@
+/*
+NAME: Chanbin Park
+PROG: highcards
+LANG: C++
+DESC: This was pretty easy. I just needed to make two arrays of cards and then sort them.
+*/
+
+
+#include <stdio.h>
+#include <algorithm>
+using namespace std;
+
+const int N = 100005;
+int n;
+int Ecards[N];
+int Bcards[N];
+int check[N];
+
+int main() {
+	freopen("highcard.in", "r", stdin);
+	freopen("highcard.out", "w", stdout);
+	scanf("%d", &n);
+	for(int i = 0; i < n; i ++) {
+		scanf("%d", &Ecards[i]);
+		check[Ecards[i]] = 1;
+	}
+	int cnt = 0;
+	for(int i = 1; i <= 2 * n; i ++) {
+		if(check[i] == 0) {
+			Bcards[cnt++] = i;
+		}
+	}
+	sort(Ecards, Ecards + n);
+	sort(Bcards, Bcards + n);
+
+	int idxB = n - 1;
+	int idxE = n - 1;
+	int ans = 0;
+	while(idxE >= 0) {
+		if(Bcards[idxB] > Ecards[idxE]) {
+			//printf("%d %d\n", idxE, idxB);
+			idxE--;
+			idxB--;
+			ans++;
+		}
+		else {
+			idxE--;
+		}
+	}
+	printf("%d", ans);
+}
