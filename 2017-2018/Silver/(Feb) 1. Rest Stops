@@ -1,0 +1,53 @@
+/*
+NAME: Chanbin Park
+PROG: reststops
+LANG: C++
+*/
+
+#include <stdio.h>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+
+typedef pair < int, int > ii;
+
+int l, n, rf, rb;
+vector < pair < int, int > > map;
+
+int main() {
+    freopen("reststops.in", "r", stdin);
+    freopen("reststops.out", "w", stdout);
+    
+    scanf("%d %d %d %d", &l, &n, &rf, &rb);
+    for(int i = 0; i < n; i ++) {
+        int x, c;
+        scanf("%d %d", &x, &c);
+        map.push_back(ii(x, c));
+    }
+    long long start_idx = 0; long long start = 0;
+    long long maxi = 0; long long max_idx = 0;
+    long long ans = 0;
+    
+    while(true) {
+        bool flag = false;
+        maxi = 0;
+        for(int i = start_idx; i < map.size(); i ++) {
+            if(maxi <= map[i].second) {
+                max_idx = i;
+                maxi = map[i].second;
+                flag = true;
+            }
+        }
+        if(!flag) break;
+        
+        if(start_idx == 0) start = 0;
+        else start = map[start_idx - 1].first;
+        long long curr_f = (map[max_idx].first - start) * rf;
+        long long curr_b = (map[max_idx].first - start) * rb;
+        ans += (curr_f - curr_b) * map[max_idx].second;
+        start_idx = max_idx + 1;
+    }
+    printf("%lld", ans);
+    return 0;
+}
