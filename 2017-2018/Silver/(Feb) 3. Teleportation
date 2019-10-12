@@ -1,0 +1,71 @@
+#include <stdio.h>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+
+int a[100000], b[100000];
+pair<int, int> slope[300000];
+vector < pair<int, int> > new_slope;
+int main()
+{
+    freopen("teleport.in", "r", stdin);
+    freopen("teleport.out", "w", stdout);
+    int n;
+    scanf("%d", &n);
+    long long int dis = 0;
+    for( int i = 0 ; i < n ; i ++ ){
+        scanf("%d %d", &a[i], &b[i]);
+        if( b[i] > a[i] ) dis = dis + (b[i] - a[i]);
+        else dis = dis + (a[i] - b[i]);
+    }
+    int k = 0;
+    for( int i = 0 ; i < n ; i ++ ){
+        if( a[i] <= 0 && 0 <= b[i] ){
+            slope[k].first = 0; slope[k].second = 1; k++;
+            slope[k].first = b[i]; slope[k].second = -2; k++;
+            slope[k].first = 2*b[i]; slope[k].second = 1; k++;
+        }
+        else if( a[i] >= 0 && b[i] <= 0){
+            slope[k].first = 0; slope[k].second = 1; k++;
+            slope[k].first = b[i]; slope[k].second = -2; k++;
+            slope[k].first = 2*b[i]; slope[k].second = 1; k++;
+        }
+        else if(a[i] >= 0 && b[i] >= 0) {
+            if( a[i] < b[i] && 2*a[i] - b[i] < 0) {
+                slope[k].first = 2*a[i]; slope[k].second = 1; k++;
+                slope[k].first = b[i]; slope[k].second = -2; k++;
+                slope[k].first = 2*b[i] - 2*a[i]; slope[k].second = 1; k++;
+            }
+        }
+        else if(a[i] <= 0 && b[i] <= 0) {
+            if( a[i] > b[i] && 2*a[i] - b[i] > 0) {
+                slope[k].first = 2*a[i]; slope[k].second = 1; k++;
+                slope[k].first = b[i]; slope[k].second = -2; k++;
+                slope[k].first = 2*b[i] - 2*a[i]; slope[k].second = 1; k++;
+            }
+        }
+    }
+    int idx = 0;
+    sort(slope, slope + k);
+    
+    for(int i = 0; i < k; i ++) {
+        if(slope[i].first != slope[i + 1].first) {
+            new_slope.push_back(slope[i]);
+        }
+        else {
+            slope[i + 1].second += slope[i].second;
+        }
+    }
+    long long angle = 0;
+    long long curr = 0;
+    long long ans = 0;
+    for(int i = 0; i < new_slope.size() - 1; i ++) {
+        angle += new_slope[i].second;
+        curr += (new_slope[i+1].first - new_slope[i].first) * angle;
+        ans = max(ans, curr);
+    }
+    printf("%lld", dis - ans);
+    
+    return 0;
+}
