@@ -1,0 +1,27 @@
+/*
+NAME: Chanbin Park
+PROG: reststops
+LANG: C++
+DESC: I found the maximum amount of edges per node and added one to find the answer.
+*/
+
+#include <stdio.h>
+#include <algorithm>
+using namespace std;
+int a[100005];
+
+int main() {
+    freopen("planting.in", "r", stdin);
+    freopen("planting.out", "w", stdout);
+    int n;
+    scanf("%d", &n);
+    for(int i = 0; i < n - 1; i ++) {
+        int x, y; scanf("%d %d", &x, &y);
+        a[x]++; a[y]++;
+    }
+    int ans = 0;
+    for(int i = 0; i < n - 1; i ++) {
+        ans = max(ans, a[i]);
+    }
+    printf("%d", ans + 1);
+}
