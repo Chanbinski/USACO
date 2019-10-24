@@ -1,0 +1,65 @@
+/*
+NAME: Chanbin Park
+PROG: perimeter
+LANG: C++
+DESC: I modified dfs so that I can calculate the perimeter as well.
+*/
+
+#include <stdio.h>
+#include <algorithm>
+#include <vector>
+using namespace std;
+typedef pair < int, int > ii;
+
+int n; int map[1005][1005]; bool visited[1005][1005]; vector<pair<int, int>> blobs; int cnt = 0; int peri = 0;
+int dx[] = {0, 0, 1, -1}; int dy[] = {1, -1, 0, 0};
+
+void visit(int x, int y) {
+    if(map[x][y] != '#') {return;}
+    cnt++;
+    visited[x][y] = true;
+    for(int i = 0 ; i < 4; i ++) {
+        int cx = dx[i] + x; int cy = dy[i] + y;
+        if(map[cx][cy] != '#') peri ++;
+        if(0 <= cx && cx < n && 0 <= cy && cy < n) {
+            if(map[cx][cy] == '#' && !visited[cx][cy]) visit(cx, cy);
+        }
+    }
+}
+
+int main() {
+    freopen("perimeter.in", "r", stdin);
+    freopen("perimeter.out", "w", stdout);
+    scanf("%d", &n);
+    for(int i = 0; i < n; i ++) {
+        for(int j = 0; j < n; j ++) {
+            char c; scanf(" %c", &c);
+            map[i][j] = c;
+        }
+    }
+    for(int i = 0; i < n; i ++) {
+        for(int j = 0; j < n; j ++) {
+            if(!visited[i][j]) {
+                visit(i, j);
+                if(cnt > 0) {
+                    blobs.push_back(ii(cnt, peri));
+                    cnt = 0; peri = 0;
+                }
+            }
+        }
+    }
+    sort(blobs.begin(), blobs.end());
+    int sz = blobs.size() - 1;
+    int ans = 10000;
+    if(blobs[sz].first == blobs[sz - 1].first) {
+        for(int i = sz; i >= 0; i --) {
+            if(blobs[i] == blobs[sz - 1]) {
+                ans = min(blobs[i].second, ans);
+            }
+        }
+        printf("%d %d", blobs[sz], ans);
+    }
+    else {
+        printf("%d %d", blobs[sz].first, blobs[sz].second);
+    }
+}
