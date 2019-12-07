@@ -1,0 +1,35 @@
+#include <cstdio>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+int n, m;
+
+vector<vector<int>> grass;
+int check[105];
+int ans[105];
+
+int main() {
+    scanf("%d %d", &n, &m);
+    grass.resize(n + 1);
+    for(int i = 0; i < m; i ++) {
+        int a, b; scanf("%d %d", &a, &b);
+        grass[a].push_back(b);
+        grass[b].push_back(a);
+    }
+    for(int i = 1; i <= n; i ++) {
+        grass[i].resize(3);
+    }
+
+    for(int i = 1; i <= n; i ++) {
+        for(int j = 1; j <= 4; j ++) {
+            if(check[i] == 0 && ans[grass[i][0]] != j && ans[grass[i][1]] != j && ans[grass[i][2]] != j) {
+                ans[i] = j;
+                check[i] = 1;
+            }
+        }
+    }
+    for(int i = 1; i <= n; i ++) {
+        printf("%d", ans[i]);
+    }
+}
