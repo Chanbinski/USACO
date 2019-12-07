@@ -1,0 +1,37 @@
+#include <cstdio>
+#include <algorithm>
+
+using namespace std;
+int N;
+int ball[4][105];
+int score[3][105];
+
+int main() {
+    scanf("%d", &N);
+    for(int i = 1; i <= 3; i ++) {
+        ball[i][0] = i;
+    }
+    for(int i = 1; i <= N; i ++) {
+        int a, b, g;
+        scanf("%d %d %d", &a, &b, &g);
+        for(int j = 1; j <= 3; j ++) {
+            if(ball[j][i - 1] == a) { ball[j][i] = b; }
+            else if(ball[j][i - 1] == b) { ball[j][i] = a; }
+            else { ball[j][i] = ball[j][i - 1]; }
+            
+            if(ball[j][i] == g) {
+                score[j][i] = 1;
+            }
+        }
+    }
+    
+    int ans = 0;
+    for(int i = 1; i <= 3; i ++) {
+        int ret = 0;
+        for(int j = 1; j <= N; j ++) {
+            ret += score[i][j];
+        }
+        ans = max(ret, ans);
+    }
+    printf("%d", ans);
+}
