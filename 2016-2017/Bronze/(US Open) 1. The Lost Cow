@@ -1,0 +1,29 @@
+#include <cstdio>
+#include <algorithm>
+
+int main() {
+    int x, y;
+    int count = 0;
+    int curr = 1;
+    int version = 0;
+    scanf("%d %d", &x, &y);
+    if(x - y > 0) version = 1;
+    else version = 2;
+    
+    while(true) {
+        x += curr;
+        count += abs(curr);
+        if(version == 2 && x >= y) {
+            count -= x - y;
+            break;
+        }
+        if(version == 1 && x <= y) {
+            count -= y - x;
+            break;
+        }
+        x -= curr;
+        count += abs(curr);
+        curr *= -2;
+    }
+    printf("%d", count);
+}
