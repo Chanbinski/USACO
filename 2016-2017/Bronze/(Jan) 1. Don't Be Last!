@@ -1,0 +1,41 @@
+#include <cstdio>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
+int n;
+pair<int, string> cow[7];
+
+int main() {
+	scanf("%d", &n);
+	cow[0].second = "Bessie\n"; cow[0].first = 0;
+	cow[1].second = "Elsie\n"; cow[1].first = 0;
+	cow[2].second = "Daisy\n"; cow[2].first = 0;
+	cow[3].second = "Gertie\n"; cow[3].first = 0;
+	cow[4].second = "Annabelle\n"; cow[4].first = 0;
+	cow[5].second = "Maggie\n"; cow[5].first = 0;
+	cow[6].second = "Henrietta\n"; cow[6].first = 0;
+	for(int i = 0; i < n; i ++) {
+		string name; int amount;
+		cin >> name >> amount;
+		if(name[0] == 'B') cow[0].first += amount; 
+		else if(name[0] == 'E') cow[1].first += amount;
+		else if(name[0] == 'D') cow[2].first += amount;
+		else if(name[0] == 'G') cow[3].first += amount;
+		else if(name[0] == 'A') cow[4].first += amount;
+		else if(name[0] == 'M') cow[5].first += amount;
+		else cow[6].first += amount;
+	}
+	sort(cow, cow + 7);
+	int mini = cow[0].first;
+	int ans = -1;
+	if(mini == cow[6].first) { printf("Tie\n"); return 0; }
+	for(int i = 1; i < 7; i ++) {
+		if(mini != cow[i].first) { 
+			if(i == 6) { cout << (cow[i].second); }
+			else if(cow[i].first != cow[i + 1].first) { cout << (cow[i].second);}
+			else {printf("Tie\n");}
+			return 0;
+		}
+	}
+}
