@@ -1,0 +1,58 @@
+#include <cstdio>
+#include <algorithm>
+#include <iostream>
+
+using namespace std;
+
+int N;
+string T[105];
+int L[105];
+int R[105];
+pair<int, int> cur;
+
+int main() {
+    freopen("traffic.in", "r", stdin);
+    freopen("traffic.out", "w", stdout);
+    scanf("%d", &N);
+    int start = -1;
+    int start2 = -1;
+    for(int i = 0; i < N; i ++) {
+        string ty; int l, r; cin >> ty >> l >> r;
+        T[i] = ty; L[i] = l; R[i] = r;
+        if(start < 0 && ty == "none") start = i;
+        if(ty == "none") start2 = i;
+    }
+    //From the right
+    cur.first = L[start2]; cur.second = R[start2];
+    for(int i = start2 - 1; i >= 0; i --) {
+        if(T[i] == "none") {
+            cur.first = max(cur.first, L[i]); cur.second = min(cur.second, R[i]);
+        }
+        else if(T[i] == "on") {
+            cur.first -= R[i]; cur.second -= L[i];
+        }
+        else {
+            cur.first += L[i]; cur.second += R[i];
+        }
+    }
+    if(cur.first < 0) cur.first = 0; if(cur.second < 0) cur.second = 0;
+    printf("%d %d", cur.first, cur.second);
+    printf("\n");
+    
+    //From the left
+    cur.first = L[start]; cur.second = R[start];
+    for(int i = start + 1; i < N; i ++) {
+        if(T[i] == "none") {
+            cur.first = max(cur.first, L[i]); cur.second = min(cur.second, R[i]);
+        }
+        else if(T[i] == "on") {
+            cur.first += L[i]; cur.second += R[i];
+        }
+        else {
+            cur.first -= R[i]; cur.second -= L[i];
+        }
+    }
+    if(cur.first < 0) cur.first = 0; if(cur.second < 0) cur.second = 0;
+    printf("%d %d", cur.first, cur.second);
+}
+
