@@ -1,0 +1,28 @@
+#include <cstdio>
+
+using namespace std;
+
+int N;
+int dir[105]; int id[105][4];
+
+int main() {
+    freopen("shuffle.in", "r", stdin);
+    freopen("shuffle.out", "w", stdout);
+    scanf("%d", &N);
+    for(int i = 0; i < N; i ++) {
+        scanf("%d", &dir[i]);
+    }
+    for(int i = 0; i < N; i ++) {
+        scanf("%d", &id[i][0]);
+    }
+    //Shuffle!
+    for(int i = 1; i < 4; i ++) {
+        for(int j = 0; j < N; j ++) {
+            int go = dir[j] - 1;
+            id[j][i] = id[go][i - 1];
+        }
+    }
+    for(int i = 0; i < N; i ++) {
+        printf("%d\n", id[i][3]);
+    }
+}
