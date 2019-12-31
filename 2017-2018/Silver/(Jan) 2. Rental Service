@@ -1,0 +1,50 @@
+#include <cstdio>
+#include <algorithm>
+
+using namespace std;
+int N, M, R;
+
+int cow[1000005];
+int rent[1000005];
+pair<int, int> store[1000005];
+long long money[1000005];
+
+bool sort_store_dec(pair<int,int> a, pair<int,int> b) {return a.first > b.first;}
+bool sort_dec(int a, int b) {return a > b;}
+
+int main() {
+    scanf("%d %d %d", &N, &M, &R);
+    for(int i = 0; i < N; i ++) { int x; scanf("%d", &x); cow[i] = x; }
+    for(int i = 0; i < M; i ++) { int x, y; scanf("%d %d", &x, &y); store[i] = make_pair(y, x); }
+    for(int i = 0; i < R; i ++) { scanf("%d", &rent[i]); }
+    sort(cow, cow + N, sort_dec);
+    sort(store, store + M, sort_store_dec); sort(rent, rent + R, sort_dec);
+    
+    int idx = 0; // -> store index
+    for(int i = 0; i < N; i ++) {
+        money[i + 1] = money[i];
+        while(idx < M && cow[i] > 0) {
+            long long use = min(cow[i], store[idx].second);
+            money[i + 1] += use * store[idx].first;
+            cow[i] -= use;
+            store[idx].second -= use;
+            if(store[idx].second == 0) {
+                idx ++;
+            }
+        }
+    }
+    int a = N - 1;
+    int rI = 0;
+    long long rental_sofar = 0;
+    while(a >= 0 && rI < R) {
+        rental_sofar += rent[rI];
+        money[a] += rental_sofar;
+        rI ++;
+        a--;
+    }
+    long long ret = 0;
+    for(int i = 1; i <= N; i ++) {
+        ret = max(ret, money[i]);
+    }
+    printf("%lld", ret);
+}
