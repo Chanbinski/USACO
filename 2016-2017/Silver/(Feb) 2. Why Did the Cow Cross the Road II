@@ -1,0 +1,26 @@
+#include <cstdio>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+const int N = 1e5 + 5;
+int a[N];
+
+int main() {
+    int n,k,b =0;
+    scanf("%d%d%d", &n,&k,&b);
+    for(int i=1;i<=b;i++){
+        int x;
+        scanf("%d", &x);
+        a[x] = 1;
+    }
+    for(int i=1;i<=n;i++) {
+        a[i] += a[i-1];
+    }
+    int ans=k;
+    for(int i=k;i<=n;i++){
+        ans = min(ans, a[i]-a[i-k]);
+    }
+    printf("%d", ans);
+}
