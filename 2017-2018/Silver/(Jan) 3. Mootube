@@ -1,0 +1,47 @@
+#include <cstdio>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+
+int N, Q;
+vector<vector<pair<int, int>>> map;
+int visited[5005];
+int check[5005][5005];
+
+void dfs(int x, int y, int rel_til_now) {
+    visited[y] = 1;
+    for(pair<int, int> j : map[y]) {
+        int next = j.first; int rel = j.second;
+        if(!visited[next]) {
+            check[x][next] = min(rel, rel_til_now);
+            dfs(x, next, min(rel, rel_til_now));
+        }
+    }
+}
+
+int main() {
+    scanf("%d %d", &N, &Q);
+    map.resize(N + 1);
+    for(int i = 0; i < N - 1; i ++) {
+        int x, y, z; scanf("%d %d %d", &x, &y, &z);
+        map[x].push_back(make_pair(y, z));
+        map[y].push_back(make_pair(x, z));
+    }
+    for(int i = 1; i <= N; i ++) {
+        if(!visited[i]) {
+            dfs(i, i, 1e9);
+            for(int i = 1; i <= N; i ++) {
+                visited[i] = 0;
+            }
+        }
+    }
+    for(int i = 0; i < Q; i ++) {
+        int k, v; scanf("%d %d", &k, &v);
+        int cnt = 0;
+        for(int j = 1; j <= N; j ++) {
+            if(j != v && check[v][j] >= k) cnt ++;
+        }
+        printf("%d\n", cnt);
+    }
+}
