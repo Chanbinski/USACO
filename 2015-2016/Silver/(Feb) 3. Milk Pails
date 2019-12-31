@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <algorithm>
+#include <stdlib.h>
+
+using namespace std;
+
+bool dp[105][200][200];
+int x, y, k, m;
+
+int main() {
+    //freopen("pails.in", "r", stdin);
+    //freopen("pails.out", "w", stdout);
+    
+    scanf("%d %d %d %d", &x, &y, &k, &m);
+    dp[0][0][0] = true;
+    
+    for(int i = 1; i <= k; i ++) {
+        for(int j = 0; j <= x; j ++) {
+            for(int l = 0; l <= y; l ++) {
+                if(dp[i - 1][j][l]) {
+                    dp[i][j][l] = true;
+                    dp[i][0][l] = true;
+                    dp[i][j][0] = true;
+                    dp[i][x][l] = true;
+                    dp[i][j][y] = true;
+                    int moveR = min(j, y - l);
+                    dp[i][j - moveR][l + moveR] = true;
+                    int moveL = min(x - j, l);
+                    dp[i][j + moveL][l - moveL] = true;
+                }
+            }
+        }
+    }
+    int ret = 1000;
+    for(int i = 0; i <= x; i ++) {
+        for(int j = 0; j <= y; j ++) {
+            if(dp[k][i][j]) ret = min(ret, abs(m - i - j));
+        }
+    }
+    printf("%d\n", ret);
+}
