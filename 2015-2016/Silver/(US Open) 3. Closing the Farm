@@ -1,0 +1,59 @@
+#include <cstdio>
+#include <vector>
+
+using namespace std;
+
+int N, M;
+vector<vector<int>> map;
+int visited[3005];
+int permu[3005];
+int deleted[3005];
+
+int dungari;
+
+void dfs(int x) {
+    visited[x] = 1;
+    for(int y : map[x]) {
+        if(!visited[y] && !deleted[y]) {
+            dfs(y);
+        }
+    }
+}
+
+int main() {
+    scanf("%d %d", &N, &M);
+    map.resize(N + 2);
+    for(int i = 0; i < M; i ++) {
+        int x, y; scanf("%d %d", &x, &y);
+        map[x].push_back(y); map[y].push_back(x);
+    }
+    for(int i = 0; i < N; i ++) {
+        scanf("%d", &permu[i]);
+    }
+    //처음 연결
+    for(int i = 1; i <= N; i ++) {
+        if(!visited[i] && !deleted[i]) {
+            dfs(i);
+            dungari ++;
+        }
+    }
+    if(dungari == 1) printf("YES\n");
+    else printf("NO\n");
+    
+    for(int i = 0; i < N - 1; i ++) {
+        int cur = permu[i];
+        deleted[cur] = 1;
+        dungari = 0;
+        for(int j = 1; j <= N; j ++) {
+            visited[j] = 0;
+        }
+        for(int j = 1; j <= N; j ++) {
+            if(!visited[j] && !deleted[j]) {
+                dfs(j);
+                dungari ++;
+            }
+        }
+        if(dungari == 1) printf("YES\n");
+        else printf("NO\n");
+    }
+}
