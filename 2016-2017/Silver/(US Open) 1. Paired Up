@@ -1,0 +1,32 @@
+#include <cstdio>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+
+int N; long long M;
+pair<int, int> map[100005];
+
+int main() {
+    scanf("%d", &N);
+    for(int i = 0; i < N; i ++) {
+        int x, y; scanf("%d %d", &x, &y);
+        map[i] = make_pair(y, x);
+        M += x;
+    }
+    sort(map, map + N);
+    int cur_f = 0; int cur_b = N - 1;
+    int ans = 0;
+    while(cur_f < cur_b) {
+        int temp = 0;
+        if(map[cur_f].second == 0) cur_f ++;
+        if(map[cur_b].second == 0) cur_b --;
+        
+        int cur = min(map[cur_f].second, map[cur_b].second);
+        map[cur_f].second -= cur;
+        map[cur_b].second -= cur;
+        temp += map[cur_f].first + map[cur_b].first;
+        ans = max(ans, temp);
+    }
+    printf("%d", ans);
+}
