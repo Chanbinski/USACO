@@ -1,0 +1,21 @@
+#include <cstdio>
+#include <algorithm>
+#include <utility>
+using namespace std;
+int N;
+
+pair<int, int> map[100005];
+
+int main() {
+    scanf("%d", &N);
+    for(int i = 0; i < N; i ++) {
+        int x; scanf("%d", &x);
+        map[i] = make_pair(x, i);
+    }
+    sort(map, map + N);
+    int maxi = 0;
+    for(int i = 0; i < N; i ++) {
+        maxi = max(maxi, map[i].second - i);
+    }
+    printf("%d", maxi + 1);
+}
