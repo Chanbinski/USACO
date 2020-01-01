@@ -36,4 +36,3 @@ front or very back has more space. For the minimum, you have to use the continuo
         maxi = max(a[n - 2] - a[0], a[n - 1] - a[1]) - (n - 2);
         printf("%d\n%d", mini, maxi);
     }
-scanf(" %c", &c);
