@@ -1,0 +1,58 @@
+#include <cstdio>
+#include <vector>
+#include <iostream>
+using namespace std;
+
+int N, M;
+char c_type[100005], f_type[100005];
+int visited[100005];
+pair<int, int> path[100005];
+vector<vector<int>> map;
+
+int group[100005];
+
+void dfs(int x, int cur) {
+    visited[x] = 1;
+    group[x] = cur;
+    for(int y : map[x]) {
+        if(!visited[y] && c_type[x] == c_type[y]) {
+            group[y] = cur;
+            dfs(y, cur);
+        }
+    }
+}
+
+int main() {
+    freopen("milkvisits.in", "r", stdin);
+    freopen("milkvisits.out", "w", stdout);
+    scanf("%d %d", &N, &M);
+    map.resize(N + 2);
+    string s; cin >> s;
+    for(int i = 0; i < M; i ++) {
+        c_type[i + 1] = s[i];
+    }
+    for(int i = 1; i < N; i ++) {
+        int x, y; scanf("%d %d", &x, &y);
+        map[x].push_back(y); map[y].push_back(x);
+    }
+    for(int i = 1; i <= M; i ++) {
+        int x, y; char z; cin >> x >> y >> z;
+        path[i] = make_pair(x, y);
+        f_type[i] = z;
+    }
+    //각 소 별로 dfs 돌아서 component 나눔
+    int cur = 1;
+    for(int i = 1; i <= N; i ++) {
+        if(!visited[i]) {
+            dfs(i, cur);
+            cur++;
+        }
+    }
+    for(int i = 1; i <= M; i ++) {
+        int start = path[i].first; int end = path[i].second;
+        if(group[start] == group[end] && f_type[i] != c_type[start]) printf("%d", 0);
+        else printf("%d", 1);
+        //printf("%d", group[i]);
+    }
+}
+
