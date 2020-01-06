@@ -1,0 +1,35 @@
+#include <cstdio>
+#include <iostream>
+#include <set>
+#include <map>
+using namespace std;
+int N;
+map<pair<string,string>, long long> mp;
+set<pair<string,string>> s;
+pair<string, string> arr[200005];
+int main() {
+    scanf("%d", &N);
+    for(int i = 0; i < N; i ++) {
+        string x; string y; string z; cin >> x >> y;
+        for(int i = 0; i < 2; i ++) { z += x[i]; }
+        pair<string, string> str = make_pair(z, y);
+        arr[i] = str;
+        s.insert(str);
+        mp[str] ++;
+    }
+    long long cnt = 0;
+    for(int i = 0; i < N; i ++) {
+        string a = arr[i].first, b = arr[i].second;
+        if(s.find(make_pair(b, a)) != s.end()) {
+            if(a == b) {
+                continue;
+            }
+            else {
+                cnt += mp[make_pair(b, a)] * mp[make_pair(a, b)];
+                s.erase(make_pair(a, b));
+                s.erase(make_pair(b, a));
+            }
+        }
+    }
+    printf("%lld", cnt);
+}
